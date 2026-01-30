@@ -11,6 +11,7 @@ const alertBox = document.getElementById('alertBox');
 const charOptions = document.querySelectorAll('.char-option');
 const restartBtn = document.getElementById('restartBtn');
 const menuBtn = document.getElementById('menuBtn');
+const shareBtn = document.getElementById('shareBtn'); // Button Share
 const gameOverOverlay = document.getElementById('gameOverOverlay');
 
 const displayPlayerName = document.getElementById('displayPlayerName');
@@ -39,97 +40,89 @@ const PIPE_FREQ = 100;
 
 function drawSpecificCharacter(context, index, x, y, size) {
     context.save();
-    
-    // Colors from images
-    const cDark = '#3d4d18';  // Dark Green from image
-    const cLight = '#c0fd5c'; // Light Base Green
+    const cDark = '#3d4d18';
+    const cLight = '#c0fd5c';
     const cBlack = '#000000';
 
     if (index === 0) {
-        // Image 0: Box dark, center light
         context.fillStyle = cDark;
         context.fillRect(x, y, size, size);
         context.fillStyle = cLight;
         context.fillRect(x + size*0.35, y + size*0.35, size*0.3, size*0.3);
     } 
     else if (index === 1) {
-        // Image 1: Checkered
         context.fillStyle = cLight;
         context.fillRect(x, y, size, size);
         context.fillStyle = cDark;
-        // Top mid, left mid, right mid, bottom mid
         context.fillRect(x + size/3, y, size/3, size/3);
         context.fillRect(x, y + size/3, size/3, size/3);
         context.fillRect(x + size*0.66, y + size/3, size/3, size/3);
         context.fillRect(x + size/3, y + size*0.66, size/3, size/3);
-        // Center hole black
         context.fillStyle = "black";
         context.fillRect(x + size/3, y + size/3, size/3, size/3);
     }
     else if (index === 2) {
-        // Image 2: Plus Sign
         context.fillStyle = "black"; 
-        context.fillRect(x, y, size, size); // bg
-        
+        context.fillRect(x, y, size, size); 
         context.fillStyle = cDark;
-        // Arms
-        context.fillRect(x + size/3, y, size/3, size/3); // Top
-        context.fillRect(x + size/3, y + size*0.66, size/3, size/3); // Bot
-        context.fillRect(x, y + size/3, size/3, size/3); // Left
-        context.fillRect(x + size*0.66, y + size/3, size/3, size/3); // Right
-        
+        context.fillRect(x + size/3, y, size/3, size/3); 
+        context.fillRect(x + size/3, y + size*0.66, size/3, size/3); 
+        context.fillRect(x, y + size/3, size/3, size/3); 
+        context.fillRect(x + size*0.66, y + size/3, size/3, size/3); 
         context.fillStyle = cLight;
-        context.fillRect(x + size/3, y + size/3, size/3, size/3); // Center
+        context.fillRect(x + size/3, y + size/3, size/3, size/3); 
     }
     else if (index === 3) {
-        // Image 3: X Dots
         context.fillStyle = "black";
         context.fillRect(x, y, size, size);
-        
         context.fillStyle = cLight;
-        // 4 Corners
         context.fillRect(x, y, size/3, size/3);
         context.fillRect(x + size*0.66, y, size/3, size/3);
         context.fillRect(x, y + size*0.66, size/3, size/3);
         context.fillRect(x + size*0.66, y + size*0.66, size/3, size/3);
-        
         context.fillStyle = cDark;
-        context.fillRect(x + size/3, y + size/3, size/3, size/3); // Center
+        context.fillRect(x + size/3, y + size/3, size/3, size/3); 
     }
     else if (index === 4) {
-        // Image 4: Logo S
         context.fillStyle = cLight;
         context.fillRect(x, y, size, size);
-        
         context.fillStyle = "black";
-        context.lineWidth = size * 0.15;
-        
-        // Draw S Lines
-        context.fillRect(x, y + size*0.2, size, size*0.15); // Top bar
-        context.fillRect(x, y + size*0.5, size, size*0.15); // Mid bar
-        context.fillRect(x, y + size*0.8, size, size*0.15); // Bot bar
-        context.fillRect(x, y + size*0.2, size*0.15, size*0.3); // Left connect
-        context.fillRect(x + size*0.85, y + size*0.5, size*0.15, size*0.3); // Right connect
+        const thick = size * 0.15;
+        context.fillRect(x, y + size*0.2, size, thick);
+        context.fillRect(x, y + size*0.5, size, thick);
+        context.fillRect(x, y + size*0.8, size, thick);
+        context.fillRect(x, y + size*0.2, thick, size*0.3);
+        context.fillRect(x + size - thick, y + size*0.5, thick, size*0.3);
     }
-
     context.restore();
 }
 
-function updatePreview() {
+function updateBigPreview() {
     pCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
     pCtx.fillStyle = "#1a1a1a";
     pCtx.fillRect(0,0, previewCanvas.width, previewCanvas.height);
     drawSpecificCharacter(pCtx, selectedCharIndex, 15, 15, 70);
 }
 
-updatePreview();
+function initButtonPreviews() {
+    charOptions.forEach((opt, idx) => {
+        const miniCanvas = opt.querySelector('canvas');
+        if (miniCanvas) {
+            const mCtx = miniCanvas.getContext('2d');
+            drawSpecificCharacter(mCtx, idx, 0, 0, 40);
+        }
+    });
+}
+
+initButtonPreviews();
+updateBigPreview();
 
 charOptions.forEach(opt => {
     opt.addEventListener('click', () => {
         charOptions.forEach(o => o.classList.remove('selected'));
         opt.classList.add('selected');
         selectedCharIndex = parseInt(opt.getAttribute('data-index'));
-        updatePreview();
+        updateBigPreview();
     });
 });
 
@@ -159,6 +152,17 @@ restartBtn.addEventListener('click', () => {
     loop();
 });
 
+// --- FITUR SHARE TO X (BARU) ---
+shareBtn.addEventListener('click', () => {
+    // Teks Tweet otomatis
+    const text = `MISSION REPORT 📜\nAgent: ${playerName}\nScore: ${score}\n\nCan you beat my high score in FLAPPY AGENT SYMBIOTIC? 🟩⬛️`;
+    const hashtags = "Symbiotic,FlappyAgent";
+    
+    // Membuka URL Twitter Intent di tab baru
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&hashtags=${hashtags}`;
+    window.open(url, '_blank');
+});
+
 function stopGameLoop() {
     gameRunning = false;
     if(animationId) {
@@ -169,7 +173,7 @@ function stopGameLoop() {
 
 function initGame() {
     startScreen.style.display = 'none';
-    gameWrapper.style.display = 'flex'; // Changed to flex for proper layout
+    gameWrapper.style.display = 'flex';
     displayPlayerName.innerText = playerName;
     
     stopGameLoop();
@@ -190,10 +194,8 @@ function resetVars() {
 
 function loop() {
     if(!gameRunning) return;
-
     update();
     draw();
-
     if(!isGameOver) {
         animationId = requestAnimationFrame(loop);
     }
@@ -243,7 +245,6 @@ function update() {
 function draw() {
     ctx.fillStyle = "#111";
     ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-
     drawSpecificCharacter(ctx, selectedCharIndex, bird.x, bird.y, bird.w);
 
     ctx.fillStyle = "#444"; 
@@ -251,11 +252,9 @@ function draw() {
     ctx.lineWidth = 2;
 
     pipes.forEach(p => {
-        // Top Pipe
         ctx.fillRect(p.x, 0, 50, p.topH);
         ctx.strokeRect(p.x, 0, 50, p.topH);
         
-        // Bot Pipe
         let botY = p.topH + PIPE_GAP;
         let botH = gameCanvas.height - botY;
         ctx.fillRect(p.x, botY, 50, botH);
@@ -273,7 +272,6 @@ function doGameOver() {
 function handleInput(e) {
     if(e.type === 'keydown' && e.code !== 'Space') return;
     e.preventDefault();
-    
     if(gameRunning && !isGameOver) {
         bird.dy = JUMP;
     }

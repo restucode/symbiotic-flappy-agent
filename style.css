@@ -1,0 +1,241 @@
+:root {
+    --base-color: #c0fd5c;
+    --dark-color: #0d1117;
+    --accent-color: #1a1a1a;
+    --border-color: #000000;
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--base-color);
+    font-family: 'Press Start 2P', cursive;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    touch-action: none;
+}
+
+#start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 450px;
+    background: var(--base-color);
+    padding: 20px;
+}
+
+.main-title {
+    font-size: 36px;
+    margin-bottom: 30px;
+    color: var(--dark-color);
+    text-shadow: 4px 4px rgba(0,0,0,0.1);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.character-preview-box {
+    margin-bottom: 20px;
+    padding: 10px;
+    background: var(--dark-color);
+    border: 4px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.input-section {
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.input-section label {
+    display: block;
+    font-size: 10px;
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    text-align: center;
+    border: 4px solid var(--border-color);
+    background: white;
+    outline: none;
+    text-transform: uppercase;
+}
+
+.character-options {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.char-option {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--dark-color);
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    opacity: 0.6;
+    transition: all 0.2s;
+}
+
+.char-option:after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px; right: 2px; bottom: 2px;
+    background: var(--dark-color);
+}
+
+.char-option.selected {
+    opacity: 1;
+    transform: scale(1.2);
+    border-color: var(--border-color);
+    box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+}
+
+.char-option.selected:after {
+    background: var(--base-color);
+}
+
+button {
+    width: 100%;
+    padding: 18px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    cursor: pointer;
+    border: 4px solid var(--border-color);
+    background: var(--dark-color);
+    color: var(--base-color);
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.2);
+    transition: transform 0.1s;
+}
+
+button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+}
+
+.secondary-btn {
+    background: white;
+    color: var(--dark-color);
+    margin-top: 10px;
+    font-size: 12px;
+    padding: 15px;
+}
+
+#alertBox {
+    display: none;
+    margin-top: 15px;
+    color: #ff3333;
+    font-size: 10px;
+    background: #ffd6d6;
+    padding: 8px;
+    border: 2px solid #ff3333;
+}
+
+#game-wrapper {
+    display: none;
+    width: 100%;
+    max-width: 420px;
+    height: 100vh;
+    max-height: 700px;
+    background: var(--dark-color);
+    border: 4px solid var(--border-color);
+    position: relative;
+    flex-direction: column;
+}
+
+#game-header {
+    height: 80px;
+    background: var(--accent-color);
+    border-bottom: 4px solid var(--base-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    color: white;
+}
+
+.header-box {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.header-logo {
+    font-size: 20px;
+    color: var(--base-color);
+    letter-spacing: 2px;
+}
+
+.label {
+    font-size: 8px;
+    color: #888;
+}
+
+.value {
+    font-size: 14px;
+    color: var(--base-color);
+}
+
+#canvas-container {
+    flex: 1;
+    position: relative;
+    background: #111;
+    overflow: hidden;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+#gameOverOverlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 10;
+    justify-content: center;
+    align-items: center;
+}
+
+.box-content {
+    width: 80%;
+    background: var(--base-color);
+    padding: 25px;
+    border: 4px solid var(--border-color);
+    text-align: center;
+    box-shadow: 0 0 20px var(--base-color);
+}
+
+.box-content h2 {
+    color: #ff3333;
+    margin-top: 0;
+    font-size: 24px;
+    text-shadow: 2px 2px #000;
+}
+
+.final-score-display {
+    margin: 20px 0;
+    font-size: 16px;
+    color: var(--dark-color);
+}
